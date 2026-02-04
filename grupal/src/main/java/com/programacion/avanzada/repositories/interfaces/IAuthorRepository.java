@@ -4,6 +4,6 @@ import com.programacion.avanzada.model.Author;
 import java.util.Iterator;
 import java.util.Set;
 
-public interface IAuthorRepository extends IRespository<Author, String> {
+public interface IAuthorRepository extends IRepository<Author, String> {
   Iterator<Author> findAllByIds(Set<String> ids);
 }

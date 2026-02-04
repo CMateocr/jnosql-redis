@@ -1,4 +1,4 @@
-package com.programacion.avanzada.usecases;
+package com.programacion.avanzada.services.impl;
 
 import com.programacion.avanzada.dtos.OrderItem;
 import com.programacion.avanzada.model.*;
@@ -6,16 +6,17 @@ import com.programacion.avanzada.repositories.interfaces.IPurchaseOrderRepositor
 import com.programacion.avanzada.services.interfaces.ICatalogService;
 import com.programacion.avanzada.services.interfaces.ICustomerService;
 import com.programacion.avanzada.services.interfaces.IInventoryService;
+import com.programacion.avanzada.services.interfaces.IPurchaseOrderService;
 import com.programacion.avanzada.shared.AppConstants;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
 @ApplicationScoped
-public class OrderUsecase {
+public class PurchaseOrderService implements IPurchaseOrderService {
 
   private final IPurchaseOrderRepository purchaseOrderRepository;
   private final ICustomerService customerService;
@@ -23,7 +24,7 @@ public class OrderUsecase {
   private final IInventoryService inventoryService;
 
   @Inject
-  public OrderUsecase(
+  public PurchaseOrderService(
       IPurchaseOrderRepository purchaseOrderRepository,
       ICustomerService customerService,
       ICatalogService catalogService,
@@ -34,14 +35,15 @@ public class OrderUsecase {
     this.inventoryService = inventoryService;
   }
 
+  @Override
   public PurchaseOrder buy(String customerId, List<OrderItem> items) {
     Customer client = customerService.getCustomer(customerId);
 
     List<LineItem> lineItems = new ArrayList<>();
     double total = 0.0;
-    int index = 1;
 
     for (OrderItem request : items) {
+      String id = UUID.randomUUID().toString();
       String isbn = request.isbn();
       int amount = request.amount();
 
@@ -52,17 +54,16 @@ public class OrderUsecase {
       double itemTotal = book.getPrice() * amount;
       total += itemTotal;
 
-      LineItem item = LineItem.builder().idx(index++).quantity(amount).bookIsbn(isbn).build();
+      LineItem item = LineItem.builder().idx(id).quantity(amount).bookIsbn(isbn).build();
 
       lineItems.add(item);
     }
 
-    // ! 3. Persistence: Create and Save the Order
-    Long orderId = Math.abs(new Random().nextLong());
+    String orderId = UUID.randomUUID().toString();
 
     PurchaseOrder order =
         PurchaseOrder.builder()
-            .id(AppConstants.buildPurchaseOrderKey(orderId.toString()))
+            .id(AppConstants.buildPurchaseOrderKey(orderId))
             .customerId(client.getId())
             .placedOn(LocalDateTime.now())
             .status(Status.PLACED)
@@ -71,5 +72,10 @@ public class OrderUsecase {
             .build();
 
     return purchaseOrderRepository.save(order);
+  }
+
+  @Override
+  public void deleteOrder(String orderId) {
+    purchaseOrderRepository.deleteById(orderId);
   }
 }

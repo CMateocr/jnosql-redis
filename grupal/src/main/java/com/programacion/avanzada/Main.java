@@ -5,7 +5,7 @@ import com.programacion.avanzada.model.PurchaseOrder;
 import com.programacion.avanzada.services.interfaces.ICatalogService;
 import com.programacion.avanzada.services.interfaces.ICustomerService;
 import com.programacion.avanzada.services.interfaces.IInventoryService;
-import com.programacion.avanzada.usecases.OrderUsecase;
+import com.programacion.avanzada.services.interfaces.IPurchaseOrderService;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import java.util.List;
@@ -23,12 +23,14 @@ public class Main {
       ICatalogService catalogService = container.select(ICatalogService.class).get();
       IInventoryService inventoryService = container.select(IInventoryService.class).get();
       ICustomerService customerService = container.select(ICustomerService.class).get();
-      OrderUsecase orderService = container.select(OrderUsecase.class).get();
+      IPurchaseOrderService orderService = container.select(IPurchaseOrderService.class).get();
 
-      //      executePurchaseFlow(catalogService, inventoryService, customerService, orderService);
+      executePurchaseFlow(catalogService, inventoryService, customerService, orderService);
 
       System.out.println("--- Cleaning up ---");
-      cleanUpData(catalogService, inventoryService, customerService);
+      //      cleanUpData(catalogService, inventoryService, customerService);
+
+      //      deleteOrder(orderService, "some-order-id-to-delete");
     }
   }
 
@@ -36,7 +38,7 @@ public class Main {
       ICatalogService catalogService,
       IInventoryService inventoryService,
       ICustomerService customerService,
-      OrderUsecase orderService) {
+      IPurchaseOrderService orderService) {
 
     System.out.println("--- Starting Application Flow ---");
 
@@ -73,6 +75,10 @@ public class Main {
     System.out.println("--- Inventory Status ---");
     System.out.println("Sold: " + inventory.getSold());
     System.out.println("Remaining: " + (inventory.getSupplied() - inventory.getSold()));
+  }
+
+  private static void deleteOrder(IPurchaseOrderService orderService, String id) {
+    orderService.deleteOrder(id);
   }
 
   private static void cleanUpData(

@@ -1,7 +1,7 @@
 package com.programacion.avanzada.services.impl;
 
 import com.programacion.avanzada.model.Customer;
-import com.programacion.avanzada.repositories.interfaces.ICustomerRepository;
+import com.programacion.avanzada.repositories.interfaces.ICustomerRepositoryAuto;
 import com.programacion.avanzada.services.interfaces.ICustomerService;
 import com.programacion.avanzada.shared.AppConstants;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,10 +10,10 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class CustomerService implements ICustomerService {
 
-  private final ICustomerRepository customerRepository;
+  private final ICustomerRepositoryAuto customerRepository;
 
   @Inject
-  public CustomerService(ICustomerRepository customerRepository) {
+  public CustomerService(ICustomerRepositoryAuto customerRepository) {
     this.customerRepository = customerRepository;
   }
 
