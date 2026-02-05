@@ -1,6 +1,6 @@
 package com.programacion.avanzada.services.impl;
 
-import com.programacion.avanzada.dtos.OrderItem;
+import com.programacion.avanzada.services.dtos.LineItemDTO;
 import com.programacion.avanzada.model.*;
 import com.programacion.avanzada.repositories.interfaces.IPurchaseOrderRepository;
 import com.programacion.avanzada.services.interfaces.ICatalogService;
@@ -36,14 +36,14 @@ public class PurchaseOrderService implements IPurchaseOrderService {
   }
 
   @Override
-  public PurchaseOrder buy(String customerId, List<OrderItem> items) {
+  public PurchaseOrder buy(String customerId, List<LineItemDTO> items) {
     Customer client = customerService.getCustomer(customerId);
 
     List<LineItem> lineItems = new ArrayList<>();
     double total = 0.0;
     int id = 0;
 
-    for (OrderItem request : items) {
+    for (LineItemDTO request : items) {
 
       String isbn = request.isbn();
       int amount = request.amount();

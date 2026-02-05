@@ -1,6 +1,6 @@
 package com.programacion.avanzada;
 
-import com.programacion.avanzada.dtos.OrderItem;
+import com.programacion.avanzada.services.dtos.LineItemDTO;
 import com.programacion.avanzada.model.PurchaseOrder;
 import com.programacion.avanzada.services.interfaces.ICatalogService;
 import com.programacion.avanzada.services.interfaces.ICustomerService;
@@ -55,7 +55,7 @@ public class Main {
     customerService.registerClient(CUSTOMER_ID, "Juan Calvache", "juan@test.com");
 
     System.out.println("Processing Purchase");
-    List<OrderItem> cart = List.of(new OrderItem(BOOK_ISBN, 2));
+    List<LineItemDTO> cart = List.of(new LineItemDTO(BOOK_ISBN, 2));
 
     try {
       PurchaseOrder order = orderService.buy(CUSTOMER_ID, cart);
