@@ -41,9 +41,10 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     List<LineItem> lineItems = new ArrayList<>();
     double total = 0.0;
+    int id = 0;
 
     for (OrderItem request : items) {
-      String id = UUID.randomUUID().toString();
+
       String isbn = request.isbn();
       int amount = request.amount();
 
@@ -54,7 +55,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
       double itemTotal = book.getPrice() * amount;
       total += itemTotal;
 
-      LineItem item = LineItem.builder().idx(id).quantity(amount).bookIsbn(isbn).build();
+      LineItem item = LineItem.builder().idx(id++).quantity(amount).bookIsbn(isbn).build();
 
       lineItems.add(item);
     }

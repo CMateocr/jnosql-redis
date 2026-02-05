@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LineItem {
-  @Column private String idx;
+  @Column private Integer idx;
 
   @Column private Integer quantity;
 
