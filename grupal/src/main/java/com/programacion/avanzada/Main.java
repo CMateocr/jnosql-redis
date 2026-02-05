@@ -107,9 +107,4 @@ public class Main {
       System.err.println("Error during cleanup: " + e.getMessage());
     }
   }
-
-  
-  public void sayHi() {
-    System.out.println("Hi!");
-  }
 }
